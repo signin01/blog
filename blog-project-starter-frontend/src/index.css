@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-size: 16px;
+  background-color: #f8fafc; /* Slate-50 */
+  padding: 20px;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Button Design */
+.button-style {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6); /* Indigo to Violet */
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  display: inline-block;
+}
+
+.button-style:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+  filter: brightness(110%);
+}
+
+.button-style:active {
+  transform: translateY(0);
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
