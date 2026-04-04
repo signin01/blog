@@ -4,35 +4,33 @@ const mongoose = require('mongoose');
 const cors = require("cors");
 const dotenv = require('dotenv');
 
-// Initialize dotenv to read .env file locally
 dotenv.config();
 
 const app = express();
 
-// Update CORS to allow your Vercel frontend later
 app.use(cors());
-
-// Middleware
 app.use(bodyParser.json());
 
-// MongoDB Connection using Environment Variable
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/blogDB';
 
 mongoose.connect(mongoURI)
   .then(() => console.log("Connection Successful"))
   .catch((err) => console.log("Connection Error: ", err));
 
-// Define Schema
 const blogSchema = new mongoose.Schema({
   newTitle: String,
   newContent: String,
   date: String,
-  likes: Number
+  likes: { type: Number, default: 0 }
 });
 
 const Blog = mongoose.model('Blog', blogSchema);
 
-// Routes
+// This fixes the "Cannot GET /" error
+app.get('/', (req, res) => {
+  res.send("Blog API is running successfully!");
+});
+
 app.get('/api/blogs', async (req, res) => {
   try {
     const blogs = await Blog.find({});
@@ -61,7 +59,7 @@ app.post('/api/blogs', async (req, res) => {
     newTitle: req.body.newTitle,
     newContent: req.body.newContent,
     date: req.body.date,
-    likes: req.body.likes
+    likes: req.body.likes || 0
   });
 
   try {
@@ -72,10 +70,9 @@ app.post('/api/blogs', async (req, res) => {
   }
 });
 
-// For local development
 if (process.env.NODE_ENV !== 'production') {
-  app.listen(5000, () => console.log('Server running on port 5000'));
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }
 
-// CRITICAL: Export the app for Vercel
 module.exports = app;
