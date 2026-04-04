@@ -8,7 +8,8 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+// Update this with your frontend URL once deployed for better security
+app.use(cors()); 
 app.use(bodyParser.json());
 
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/blogDB';
@@ -26,7 +27,7 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model('Blog', blogSchema);
 
-// This fixes the "Cannot GET /" error
+// Home route to prevent Vercel "Cannot GET /" error
 app.get('/', (req, res) => {
   res.send("Blog API is running successfully!");
 });

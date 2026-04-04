@@ -7,10 +7,15 @@ function Blogs() {
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
 
+    // Updated URL to point to your live Vercel Backend
+    const API_BASE_URL = "https://blog-theta-ten-90.vercel.app/api/blogs";
+
     const fetchBlogs = () => {
-        axios.get("http://localhost:5000/api/blogs").then((res) => {
-            setBlogs(res.data);
-        }).catch(err => console.log("Fetch error"));
+        axios.get(API_BASE_URL)
+            .then((res) => {
+                setBlogs(res.data);
+            })
+            .catch(err => console.log("Fetch error", err));
     };
 
     useEffect(() => {
@@ -20,15 +25,28 @@ function Blogs() {
 
     const handleLike = async (id) => {
         try {
-            await axios.patch(`http://localhost:5000/api/blogs/like/${id}`);
+            // Using backticks for the dynamic ID
+            await axios.patch(`${API_BASE_URL}/like/${id}`);
             fetchBlogs();
-        } catch (err) { console.error(err); }
+        } catch (err) { 
+            console.error(err); 
+        }
     };
 
     const handleNewBlogSubmit = (e) => {
         e.preventDefault();
-        const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        axios.post("http://localhost:5000/api/blogs", { newTitle, date, newContent, likes: 0 }).then(() => {
+        const date = new Date().toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+
+        axios.post(API_BASE_URL, { 
+            newTitle, 
+            date, 
+            newContent, 
+            likes: 0 
+        }).then(() => {
             setNewTitle('');
             setNewContent('');
             fetchBlogs();
@@ -41,6 +59,7 @@ function Blogs() {
                 Latest <span className='text-indigo-600'>Insights</span>
             </h2>
 
+            {/* Create Blog Form */}
             <div className="mb-16 bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
                 <form onSubmit={handleNewBlogSubmit} className="flex flex-col gap-5">
                     <h3 className='text-xl font-bold text-slate-700'>Write a New Blog</h3>
@@ -56,10 +75,13 @@ function Blogs() {
                         className="p-4 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
                         rows="4" required
                     />
-                    <button type="submit" className="button-style w-max px-10">Post Content</button>
+                    <button type="submit" className="bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition-colors w-max px-10">
+                        Post Content
+                    </button>
                 </form>
             </div>
 
+            {/* Display Blog Posts */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {blogs.map((blog) => (
                     <div key={blog._id} className="p-8 bg-white shadow-md rounded-3xl border border-slate-50 hover:shadow-xl transition-all">
