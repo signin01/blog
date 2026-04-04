@@ -8,8 +8,12 @@ dotenv.config();
 
 const app = express();
 
-// Update this with your frontend URL once deployed for better security
-app.use(cors()); 
+// SECURITY UPDATE: Replace the asterisk or empty cors() with your actual frontend URL
+// Example: "https://blog-project-frontend.vercel.app"
+app.use(cors({
+  origin: "*" // Change "*" to your specific Vercel frontend URL once it finishes deploying
+}));
+
 app.use(bodyParser.json());
 
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/blogDB';
@@ -27,11 +31,12 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model('Blog', blogSchema);
 
-// Home route to prevent Vercel "Cannot GET /" error
+// Home route to verify deployment status
 app.get('/', (req, res) => {
   res.send("Blog API is running successfully!");
 });
 
+// GET all blogs
 app.get('/api/blogs', async (req, res) => {
   try {
     const blogs = await Blog.find({});
@@ -41,6 +46,7 @@ app.get('/api/blogs', async (req, res) => {
   }
 });
 
+// LIKE a blog post
 app.patch('/api/blogs/like/:id', async (req, res) => {
   try {
     const updatedBlog = await Blog.findByIdAndUpdate(
@@ -55,6 +61,7 @@ app.patch('/api/blogs/like/:id', async (req, res) => {
   }
 });
 
+// POST a new blog
 app.post('/api/blogs', async (req, res) => {
   const blog = new Blog({
     newTitle: req.body.newTitle,
@@ -71,9 +78,11 @@ app.post('/api/blogs', async (req, res) => {
   }
 });
 
+// Start server locally if not in production
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }
 
+// Export for Vercel
 module.exports = app;
