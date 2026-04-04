@@ -1,6 +1,5 @@
 import React from 'react';
-import Navbar from './common/Navbar';
-import Footer from './common/Footer';
+// Navbar and Footer were removed to fix the 'no-unused-vars' build error
 import BlogProfileImage from "../assets/Blog Website Design.jpg";
 import HTML from "../assets/html.png";
 import CSS from "../assets/css-3.png";
@@ -10,7 +9,7 @@ import DB from "../assets/data-server.png";
 import NODE from "../assets/node-js.png";
 import P1 from "../assets/p1.jpg";
 import P2 from "../assets/p2.png";
-import P3 from "../assets/p3.png";
+// P3 removed to fix the 'no-unused-vars' build error
 
 function Home() {
     // Function for smooth scrolling
@@ -35,7 +34,6 @@ function Home() {
                         Let's transform your ideas into reality with clean code and intuitive design.
                     </p>
                     <div className='flex gap-4'>
-                        {/* Updated Buttons with Scroll Logic */}
                         <button onClick={() => scrollToSection('hire-me')} className='button-style'>
                             Hire Me
                         </button>
@@ -127,8 +125,6 @@ function Home() {
                     <button className="button-style px-12 py-4">Let's Talk</button>
                 </div>
             </div>
-
-            <Footer/>
         </div>
     );
 }
